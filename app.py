@@ -4,7 +4,7 @@ import json, uuid, datetime, os, sqlite3
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "uttam-garment-secret-2026")
 
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "MP07@sethhukumchand")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 DB_PATH = os.path.join(os.path.dirname(__file__), "uttam.db")
 
 # ---------------------------------------------------------------------------
