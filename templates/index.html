@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uttam Garment – Exclusive Maxi Collection</title>
+  <meta name="description" content="Uttam Garment – Shop premium women's clothing: sarees, kurtis, lehengas, suits. Quality fabric, safe delivery across India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+<!-- ═══════════════════ ANNOUNCEMENT TICKER ═══════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>✨ Welcome to Uttam Garment – Special Maxi, Cotton &amp; Silk Collection Available! ✨</span>
+    <span>🚚 Safe Delivery Across India &nbsp;|&nbsp; 💯 100% Quality Fabric Assured &nbsp;|&nbsp; 🛍️ New Arrivals Every Week ✨</span>
+    <span>🎉 Special Maxi, Cotton &amp; Silk Collections Now In Store! ✨</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ NAVBAR ═══════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a class="brand" href="#hero">
+      <span class="brand-name">Uttam Garment</span>
+      <span class="brand-tagline">Exclusive Maxi Collection</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#products">Shop</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon" id="searchToggle" title="Search"><i class="fas fa-search"></i></button>
+      <button class="btn-icon" id="themeToggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+      <button class="btn-icon cart-btn" id="cartToggle" title="Cart">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="btn-icon hamburger" id="hamburger" title="Menu"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+  <!-- Search Bar (slides in) -->
+  <div class="search-bar-wrap" id="searchBarWrap">
+    <div class="search-inner">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search products, fabrics, occasions…" autocomplete="off" />
+      <button id="searchClose"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PROMO BANNER ═══════════════════ -->
+<div class="promo-banner">
+  <div class="promo-inner">
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+    <span>🔥 FLAT 50% OFF! 🔥</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+   
+    <p class="hero-sub">New Collection 2026</p>
+    <h1 class="hero-title">Grace<br>Comfort</h1>
+    <p class="hero-desc">Discover exclusive &amp; premium maxi dresses crafted with love for every occasion.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Now</a>
+      <a href="#contact" class="btn-outline">Visit Store</a>
+    </div>
+    <div class="trust-badges">
+      <span>✨ 100% Quality Fabric</span>
+      <span>🚚 Safe Delivery Across India</span>
+      <span>💬 Easy Support</span>
+    </div>
+  </div>
+ 
+  <div class="hero-visual">
+    
+    <div class="hero-img-frame">
+      <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=800&q=80" alt="Maxi Dresses" />
+      
+      <div class="hero-badge">New<br>Arrivals</div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ CATEGORY FILTERS ═══════════════════ -->
+<section class="filters-section" id="products">
+  <div class="container">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      {% for cat in categories %}
+      <button class="filter-tab" data-filter="{{ cat }}">{{ cat }}</button>
+      {% endfor %}
+      {% for fab in fabrics %}
+      <button class="filter-tab" data-filter="{{ fab }}">{{ fab }}</button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PRODUCTS GRID ═══════════════════ -->
+<section class="products-section">
+  <div class="container">
+    <div class="products-grid" id="productsGrid">
+      {% for p in products %}
+      {% set discount = ((p.mrp - p.price) / p.mrp * 100) | int %}
+      <div class="product-card"
+           data-id="{{ p.id }}"
+           data-category="{{ p.category }}"
+           data-fabric="{{ p.fabric }}"
+           data-name="{{ p.name | lower }}"
+           data-occasion="{{ p.occasion | lower }}">
+
+        <!-- Badge -->
+        {% if p.badge %}
+        <span class="product-badge badge-{{ p.badge | replace(' ', '-') | lower }}">{{ p.badge }}</span>
+        {% endif %}
+
+        <!-- Discount Tag -->
+        {% if discount > 0 %}
+        <span class="discount-tag">{{ discount }}% OFF</span>
+        {% endif %}
+
+        <!-- Share -->
+        <button class="share-btn" data-id="{{ p.id }}" data-name="{{ p.name }}" title="Share"><i class="fas fa-share-alt"></i></button>
+
+        <!-- Admin Delete Button (only shown when admin session active) -->
+        {% if is_admin %}
+        <button class="admin-delete-btn" data-id="{{ p.id }}" data-name="{{ p.name }}" title="Delete Product (Admin)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        {% endif %}
+
+        <!-- Product Image -->
+        <div class="product-img-wrap" onclick="openZoom({{ p.id }})">
+          <img src="{{ p.images[0] }}" alt="{{ p.name }}" class="product-img" loading="lazy" />
+          {% if p.images | length > 1 %}
+          <img src="{{ p.images[1] }}" alt="{{ p.name }}" class="product-img product-img-hover" loading="lazy" />
+          {% endif %}
+          <div class="zoom-hint"><i class="fas fa-search-plus"></i> View</div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+          {% if p.fabric or p.occasion %}
+          <p class="product-fabric">{{ p.fabric }}{% if p.fabric and p.occasion %} · {% endif %}{{ p.occasion }}</p>
+          {% endif %}
+          <h3 class="product-name">{{ p.name }}</h3>
+          <div class="product-pricing">
+            <span class="price-current">₹{{ p.price | int }}</span>
+            {% if p.mrp and p.mrp > p.price %}
+            <span class="price-mrp">₹{{ p.mrp | int }}</span>
+            {% endif %}
+          </div>
+
+          <!-- Color Picker (only if colors exist) -->
+          {% if p.colors %}
+          <div class="option-row">
+            <label>Color:</label>
+            <div class="color-options" data-pid="{{ p.id }}">
+              {% for c in p.colors %}
+              <button class="color-chip {% if loop.first %}selected{% endif %}" data-color="{{ c }}">{{ c }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Size Picker (only if sizes exist) -->
+          {% if p.sizes %}
+          <div class="option-row">
+            <label>Size: <a class="size-guide-link" onclick="openSizeGuide()">Size Guide</a></label>
+            <div class="size-options" data-pid="{{ p.id }}">
+              {% for s in p.sizes %}
+              <button class="size-chip {% if loop.first and s.qty > 0 %}selected{% endif %} {% if s.qty == 0 %}out-of-stock{% endif %}"
+                      data-size="{{ s.size }}"
+                      data-qty="{{ s.qty }}"
+                      {% if s.qty == 0 %}disabled title="Out of Stock"{% endif %}>
+                {{ s.size }}{% if s.qty == 0 %}<span class="oos-x">✕</span>{% endif %}
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <button class="btn-add-cart" data-id="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.price }}" data-img="{{ p.images[0] }}">
+            <i class="fas fa-shopping-bag"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="no-results" id="noResults" style="display:none;">
+      <i class="fas fa-search"></i>
+      <p>No products found. Try a different search or filter.</p>
+      
+    </div>
+    <!-- Pagination Container (Yeh ab grid aur no-results ke baahar aayega) -->
+    <div id="paginationContainer" style="display: flex; justify-content: center; gap: 8px; margin-top: 36px; margin-bottom: 20px;"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ GALLERY ═══════════════════ -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Gallery</h2>
+      <p>A peek into our boutique &amp; latest collections</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item tall" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&q=80" alt="Gallery 1" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="gallery-item" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&q=80" alt="Gallery 2" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="gallery-item" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4b7b49?w=600&q=80" alt="Gallery 3" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="gallery-item wide" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&q=80" alt="Gallery 4" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="gallery-item" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&q=80" alt="Gallery 5" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+      <div class="gallery-item tall" onclick="openGalleryZoom(this)">
+        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4b7b49?w=600&q=80" alt="Gallery 6" loading="lazy"/>
+        <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ REVIEWS ═══════════════════ -->
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="section-header">
+      <h2>Customer Reviews</h2>
+      <p>What our lovely customers say</p>
+    </div>
+    <div class="reviews-grid" id="reviewsGrid" style="max-height: 450px; overflow-y: auto; padding-right: 10px;">
+      {% for rev in reviews %}
+      <div class="review-card">
+        <div class="review-stars">{{ rev.stars }}</div>
+        <p class="review-text">"{{ rev.text }}"</p>
+        <div class="review-author"><strong>{{ rev.name }}</strong>{{ ' – ' + rev.city if rev.city else '' }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Review Form -->
+    <div class="review-form-wrap">
+      <h3>Share Your Experience</h3>
+      <form id="reviewForm" class="review-form">
+        <div class="form-row">
+          <input type="text" id="reviewName" placeholder="Your Name" required />
+          <input type="text" id="reviewCity" placeholder="City" />
+        </div>
+        <div class="star-select" id="starSelect">
+          <span>Your Rating:</span>
+          <button type="button" class="star" data-val="1">★</button>
+          <button type="button" class="star" data-val="2">★</button>
+          <button type="button" class="star" data-val="3">★</button>
+          <button type="button" class="star" data-val="4">★</button>
+          <button type="button" class="star" data-val="5">★</button>
+        </div>
+        <textarea id="reviewText" placeholder="Write your review…" rows="3" required></textarea>
+        <button type="submit" class="btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FAQ + POLICIES ═══════════════════ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-cols">
+      <!-- FAQ -->
+      <div class="faq-block">
+        <div class="section-header left">
+          <h2>FAQ</h2>
+          <p>Common questions answered</p>
+        </div>
+        <div class="accordion" id="faqAccordion">
+          <div class="acc-item">
+            <button class="acc-head">Do you deliver across India? <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Yes! We deliver to all states and union territories across India. Delivery charges are calculated based on your location/distance.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">How do I place an order? <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Add items to your cart, fill in your address, and confirm via WhatsApp. Our team will process your order and confirm dispatch.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">What payment methods are accepted? <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>We accept UPI (GPay, PhonePe, Paytm), bank transfer, and cash on delivery (COD) for select pincodes.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">How long does delivery take? <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Typically 3–7 business days depending on your location. Express delivery available in select cities.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">Can I customise size or colour? <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>For certain products, customisation is possible. Please reach out via WhatsApp or call us before placing the order.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Return Policy -->
+      <div class="faq-block">
+        <div class="section-header left">
+          <h2>Return &amp; Exchange</h2>
+          <p>Our hassle-free policy</p>
+        </div>
+        <div class="accordion" id="policyAccordion">
+          <div class="acc-item">
+            <button class="acc-head">Return Policy <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Returns are accepted within 7 days of delivery for manufacturing defects or wrong items. The product must be unused, unwashed, and in original packaging.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">Exchange Policy <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Exchange for size or colour is possible within 7 days. Shipping charges for exchange are borne by the customer unless the fault is ours.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">Refund Process <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Approved refunds are processed within 5–7 business days via original payment method or as store credit.</p></div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head">Non-Returnable Items <i class="fas fa-chevron-down"></i></button>
+            <div class="acc-body"><p>Sale items, custom-stitched garments, and items marked "Final Sale" are not eligible for return or exchange.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CONTACT ═══════════════════ -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2>Visit &amp; Contact Us</h2>
+      <p>We'd love to hear from you</p>
+    </div>
+
+    <div class="store-status">
+      <span class="status-dot"></span> Online Orders Open 24/7
+    </div>
+
+    <div class="contact-grid">
+      <!-- Address -->
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <h4>Store Address</h4>
+        <p id="shopAddress">Shri Gopalji Complex, Sadar Bazar Morar,<br>Gwalior – 474006, Madhya Pradesh, India</p>
+        <div class="contact-actions">
+          <button class="btn-copy" onclick="copyText('shopAddress', this)"><i class="fas fa-copy"></i> Copy</button>
+          <a class="btn-map" href="https://www.google.com/maps/search/Surat+Cloth+Market/@21.1702,72.8311,14z" target="_blank"><i class="fas fa-directions"></i> Get Directions</a>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+        <h4>Call Us</h4>
+        <p id="shopPhone"><a href="tel:+918839948904">+91 8839948904</a></p>
+        <small class="no-wa-note"><i class="fas fa-exclamation-circle"></i> Calling only – No WhatsApp on this number</small>
+        <div class="contact-actions">
+          <button class="btn-copy" onclick="copyText('shopPhone', this)"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+        <h4>Email Us</h4>
+        <p id="shopEmail"><a href="mailto:uttamgarment@gmail.com">uttamgarment@gmail.com</a></p>
+        <div class="contact-actions">
+          <button class="btn-copy" onclick="copyText('shopEmail', this)"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+      </div>
+
+      <!-- Social -->
+      <div class="contact-card">
+        <div class="contact-icon"><i class="fas fa-share-alt"></i></div>
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="https://www.instagram.com/uttamgarments" target="_blank" class="social-btn instagram"><i class="fab fa-instagram"></i> Instagram</a>
+          <a href="https://www.facebook.com/uttamgarment1" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+        </div>
+        <p class="share-note">📣 Share our collection with friends &amp; family!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="brand-name">Uttam Garment</span>
+        <p>Exclusive Maxi Collection – Celebrating elegance with every stitch.</p>
+        <div class="social-links mt">
+          <a href="https://www.instagram.com/uttamgarments" target="_blank" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com/uttamgarment1" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://wa.me/919300243660" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#products">Shop</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Collections</h5>
+        <ul>
+          <li><a href="#products">Daily Wear</a></li>
+          <li><a href="#products">Festive</a></li>
+          <li><a href="#products">Wedding</a></li>
+          <li><a href="#products">Silk Sarees</a></li>
+          <li><a href="#products">Cotton Suits</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Policies</h5>
+        <ul>
+          <li><a href="#faq">Return Policy</a></li>
+          <li><a href="#faq">Exchange Policy</a></li>
+          <li><a href="#faq">Shipping Info</a></li>
+          <li><a href="#faq">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Uttam Garment. All Rights Reserved.</p>
+      <p class="footer-share">💖 Share our collection with friends &amp; family!</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════ ADMIN PANEL (discreet, bottom of page) ═══════════════════ -->
+<section class="admin-section" id="adminSection">
+  <div class="container">
+    <!-- Collapsed toggle -->
+    <button class="admin-toggle-btn" id="adminToggleBtn" onclick="toggleAdminPanel()">
+      <i class="fas fa-shield-alt"></i> Admin Panel
+    </button>
+
+    <div class="admin-panel-wrap" id="adminPanelWrap">
+
+      <!-- Admin Login -->
+      <div class="admin-login-box" id="adminLoginBox">
+        <h4><i class="fas fa-lock"></i> Admin Login</h4>
+        <div class="admin-login-row">
+          <input type="password" id="adminPasswordInput" placeholder="Enter admin password…" />
+          <button class="admin-btn-primary" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </div>
+        <p class="admin-msg" id="adminLoginMsg"></p>
+      </div>
+
+      <!-- Admin Dashboard (shown when logged in) -->
+      <div class="admin-dashboard" id="adminDashboard" style="display:none;">
+        <div class="admin-dash-header">
+          <span><i class="fas fa-check-circle" style="color:var(--success)"></i> Logged in as Admin</span>
+          <button class="admin-btn-danger-sm" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <!-- Add Product Form -->
+        <div class="admin-add-product">
+          <h4><i class="fas fa-plus-circle"></i> Add New Product</h4>
+          <form id="adminAddProductForm" class="admin-form">
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Product Name <span class="req">*</span></label>
+                <input type="text" name="name" placeholder="e.g. Silk Anarkali Suit" required />
+              </div>
+              <div class="admin-form-group">
+                <label>SKU / ID <span class="opt">(optional)</span></label>
+                <input type="text" name="sku" placeholder="e.g. UG-SILK-001" />
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Price (₹) <span class="req">*</span></label>
+                <input type="number" name="price" placeholder="e.g. 999" min="0" step="0.01" required />
+              </div>
+              <div class="admin-form-group">
+                <label>MRP (₹) <span class="opt">(optional)</span></label>
+                <input type="number" name="mrp" placeholder="e.g. 1999" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Category <span class="opt">(optional)</span></label>
+                <input type="text" name="category" placeholder="e.g. Daily Wear / Festive / Wedding" />
+              </div>
+              <div class="admin-form-group">
+                <label>Fabric <span class="opt">(optional)</span></label>
+                <input type="text" name="fabric" placeholder="e.g. Cotton, Silk, Rayon" />
+              </div>
+            </div>
+
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label>Occasion <span class="opt">(optional)</span></label>
+                <input type="text" name="occasion" placeholder="e.g. Casual, Wedding, Festive" />
+              </div>
+              <div class="admin-form-group">
+                <label>Badge <span class="opt">(optional)</span></label>
+                <select name="badge">
+                  <option value="">— No Badge —</option>
+                  <option value="New Arrival">New Arrival</option>
+                  <option value="Best Seller">Best Seller</option>
+                  <option value="Special">Special</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="admin-form-group full">
+              <label>Image URL(s) <span class="opt">(optional – comma-separated for multiple)</span></label>
+              <input type="text" name="images" placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" />
+            </div>
+
+            <div class="admin-form-group full">
+              <label>Colors <span class="opt">(optional – comma-separated, e.g. Red, Blue, Green)</span></label>
+              <input type="text" name="colors" placeholder="Pink, Yellow, White" />
+            </div>
+
+            <div class="admin-form-group full">
+              <label>Sizes with Stock <span class="opt">(optional – format: S-5, M-3, L-2 or 32-4, 34-6)</span></label>
+              <input type="text" name="sizes" placeholder="S-5, M-8, L-3, XL-0  or  32-4, 34-6, 36-2" />
+            </div>
+
+            <div class="admin-form-group full">
+              <label>Description <span class="opt">(optional)</span></label>
+              <textarea name="description" rows="2" placeholder="Short product description…"></textarea>
+            </div>
+
+            <div class="admin-form-group full">
+              <label>Wash Care <span class="opt">(optional)</span></label>
+              <input type="text" name="wash_care" placeholder="e.g. Machine wash cold, gentle cycle." />
+            </div>
+
+            <div class="admin-form-actions">
+              <button type="submit" class="admin-btn-primary"><i class="fas fa-plus"></i> Add Product</button>
+              <button type="reset" class="admin-btn-ghost"><i class="fas fa-undo"></i> Reset</button>
+            </div>
+            <p class="admin-msg" id="adminAddMsg"></p>
+          </form>
+        </div>
+      </div>
+
+    </div><!-- /.admin-panel-wrap -->
+  </div>
+</section>
+
+<!-- ═══════════════════ FLOATING WHATSAPP ═══════════════════ -->
+<a class="whatsapp-float" href="https://wa.me/919300243660?text=Hello%20Uttam%20Garment%2C%20I%20have%20an%20inquiry%20about%20your%20collection." target="_blank" title="WhatsApp Inquiry">
+  <i class="fab fa-whatsapp"></i>
+  <span class="wa-tooltip">Chat with us!</span>
+</a>
+
+<!-- ═══════════════════ MINI CART DRAWER ═══════════════════ -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-bag"></i> My Cart</h3>
+    <button onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="delivery-note"><i class="fas fa-truck"></i> Free Delivery till ₹500! 🚚</div>
+    <div class="cart-total">
+      <span>Subtotal:</span>
+      <strong id="cartTotal">₹0</strong>
+    </div>
+    <button class="btn-primary full-width" onclick="openCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHECKOUT MODAL ═══════════════════ -->
+<div class="modal-overlay" id="checkoutOverlay">
+  <div class="modal checkout-modal">
+    <div class="modal-header">
+      <h3><i class="fas fa-map-marker-alt"></i> Delivery Details</h3>
+      <button class="modal-close" onclick="closeModal('checkoutOverlay')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="checkoutForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="cName" placeholder="e.g. Uttam Garment" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="cPhone" placeholder="e.g. 9876543210" required pattern="[0-9]{10}" />
+          </div>
+          <div class="form-group full">
+            <label>House No / Flat / Street *</label>
+            <input type="text" id="cHouse" placeholder="e.g. Shop No. 1, Main Market" required />
+          </div>
+          <div class="form-group">
+            <label>Area / Locality *</label>
+            <input type="text" id="cArea" placeholder="e.g. Morar" required />
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" id="cCity" placeholder="e.g. Gwalior" required />
+          </div>
+          <div class="form-group">
+            <label>Pincode *</label>
+            <input type="text" id="cPin" placeholder="e.g. 474006" required pattern="[0-9]{6}" />
+          </div>
+          <div class="form-group">
+            <label>State *</label>
+            <input type="text" id="cState" placeholder="e.g. Madhya Pradesh" required />
+          </div>
+        </div>
+        <div class="location-btn-row">
+          <button type="button" class="btn-location" id="locationBtn" onclick="captureLocation()">
+            <i class="fas fa-map-pin"></i> Share Live Location / Pin on Google Maps
+          </button>
+          <span class="location-status" id="locationStatus"></span>
+        </div>
+        <div class="delivery-note mt"><i class="fas fa-truck"></i> Free Delivery till ₹500! 🚚</div>
+        <button type="submit" class="btn-primary full-width mt">
+          <i class="fab fa-whatsapp"></i> Confirm &amp; Send Order via WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ZOOM MODAL ═══════════════════ -->
+<div class="modal-overlay" id="zoomOverlay">
+  <div class="modal zoom-modal">
+    <button class="modal-close" onclick="closeModal('zoomOverlay')"><i class="fas fa-times"></i></button>
+    <div class="zoom-body">
+      <img id="zoomImg" src="" alt="Product Zoom" />
+      <div class="zoom-thumbs" id="zoomThumbs"></div>
+    </div>
+    <div class="zoom-info" id="zoomInfo"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SIZE GUIDE MODAL ═══════════════════ -->
+<div class="modal-overlay" id="sizeGuideOverlay">
+  <div class="modal size-modal">
+    <div class="modal-header">
+      <h3>📐 Size Guide</h3>
+      <button class="modal-close" onclick="closeModal('sizeGuideOverlay')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="size-note">Measurements are in inches. For best fit, measure loosely.</p>
+      <div class="size-table-wrap">
+        <table class="size-table">
+          <thead>
+            <tr><th>Size</th><th>Chest</th><th>Waist</th><th>Hip</th><th>Length</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>S / 36</td><td>36"</td><td>28"</td><td>38"</td><td>46"</td></tr>
+            <tr><td>M / 38</td><td>38"</td><td>30"</td><td>40"</td><td>47"</td></tr>
+            <tr><td>L / 40</td><td>40"</td><td>32"</td><td>42"</td><td>48"</td></tr>
+            <tr><td>XL / 42</td><td>42"</td><td>34"</td><td>44"</td><td>49"</td></tr>
+            <tr><td>XXL / 44</td><td>44"</td><td>36"</td><td>46"</td><td>50"</td></tr>
+            <tr><td>Free Size</td><td>Up to 42"</td><td>Up to 34"</td><td>Up to 44"</td><td>Varies</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="size-tips">
+        <h5>💡 Fit Tips</h5>
+        <ul>
+          <li>For kurtis &amp; suits, measure bust for best fit.</li>
+          <li>Sarees are free-size but blouse size matters.</li>
+          <li>For lehengas, measure waist and hip.</li>
+          <li>When between sizes, choose the larger size.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ GALLERY ZOOM ═══════════════════ -->
+<div class="modal-overlay" id="galleryZoomOverlay">
+  <div class="modal gallery-zoom-modal">
+    <button class="modal-close" onclick="closeModal('galleryZoomOverlay')"><i class="fas fa-times"></i></button>
+    <img id="galleryZoomImg" src="" alt="Gallery" />
+  </div>
+</div>
+
+<!-- ═══════════════════ TOAST ═══════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+  // Inject product data from Flask into JS
+  window.PRODUCTS = {{ products | tojson }};
+  // Inject admin status
+  window.IS_ADMIN = {{ 'true' if is_admin else 'false' }};
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
